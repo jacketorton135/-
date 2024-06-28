@@ -1,0 +1,1 @@
+print(list(map(lambda x: x + 10 if x < 60 else x, a)))
