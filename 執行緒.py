@@ -3,17 +3,26 @@ import threading
 
 def func1():
     print('Function 1 starting...')
-    for i in range(30):
-        time.sleep(0.1)
+    for i in range(1, 4):
+        time.sleep(1)
+        print(f'1-{i}')
     
+        event.set()
     lock.acquire()
     print('Function 1 end')
     lock.release()
 
 def func2():
     print('Function 2 starting...')
-    for i in range(30):
-        time.sleep(0.1)
+    for i in range(1, 4):
+        
+        event.wait()
+        event.clear()
+        
+        time.sleep(1)
+        print(f'2-{i}')
+        
+        event2.set()
 
     lock.acquire()
     print('Function 2 end')
@@ -21,8 +30,14 @@ def func2():
 
 def func3():
     print('Function 3 starting...')
-    for i in range(30):
-        time.sleep(0.1)
+    for i in range(1, 4):
+        event2.wait()
+        event2.clear()
+        
+        time.sleep(1)
+        print(f'3-{i}')
+        
+        event1.set()
 
     lock.acquire()
     print('Function 3 end')
@@ -30,6 +45,10 @@ def func3():
 
 # 建立Lock物件
 lock = threading.Lock()
+
+event = threading.Event()
+event1 = threading.Event()
+event2 = threading.Event()
 
 # 建立執行緒
 f1 = threading.Thread(target=func1)
